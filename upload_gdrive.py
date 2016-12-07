@@ -13,6 +13,6 @@ def upload_to_drive(df):
 
     
 if __name__ == '__main__':
-    df = pd.read_csv('gmv_affiliates.csv')
+    df = pd.read_csv('./data/gmv_affiliates.csv')
     df = df.fillna('').reset_index(drop=True)
     upload_to_drive(df)

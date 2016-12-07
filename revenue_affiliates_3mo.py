@@ -150,7 +150,7 @@ def rev_aff_skimlinks(start_date, end_date, sk_api_key, sk_private):
     skimlinks = z[['date', 'clickTime', 'merchantID','commissionValue', 'status','customID', 'orderValue']]
     skimlinks.insert(0, 'affiliateNetwork', 'skimlinks', allow_duplicates=True)
     # add merchant name
-    sk_merchant = pd.read_csv('./merchant_name/sk_merchantName.csv', dtype=object)
+    sk_merchant = pd.read_csv('./data/merchant_name/sk_merchantName.csv', dtype=object)
     skimlinks = skimlinks.merge(sk_merchant, how='left', left_on='merchantID', right_on='id')
     skimlinks.drop('id', axis=1, inplace=True)
     return skimlinks
@@ -238,7 +238,7 @@ def rev_aff_aw(start_date, end_date, aw_pw):
             pass     
     aw = w
     # add merchant name
-    aw_merchant = pd.read_csv('./merchant_name/aw_merchantName.csv', dtype=object)
+    aw_merchant = pd.read_csv('./data/merchant_name/aw_merchantName.csv', dtype=object)
     aw = aw.merge(aw_merchant, how='left', left_on='merchantID', right_on='id')
     aw.drop('id', axis=1, inplace=True)
     return aw
@@ -280,7 +280,7 @@ def rev_aff_linkshare(start_date, end_date, lk_api_token):
     lkshare['date'] = pd.to_datetime(lkshare['date']).dt.strftime('%d/%m/%Y')
     lkshare['clickTime'] = pd.to_datetime(lkshare['clickTime']).dt.strftime('%d/%m/%Y')
     # add merchant name
-    lkshare_merchant = pd.read_csv('./merchant_name/lk_merchantName.csv')
+    lkshare_merchant = pd.read_csv('./data/merchant_name/lk_merchantName.csv')
     lkshare = lkshare.merge(lkshare_merchant, how='left',
                             left_on='merchantID', right_on='id')
     lkshare.drop('id', axis=1, inplace=True)
@@ -343,7 +343,7 @@ def download_to_drive(start_date, end_date, filename):
     df = dedup(df)
     df.sort_values('date', axis=0, ascending=False, inplace=True)
     df = df.fillna('').reset_index(drop=True)
-    df.to_csv('gmv_affiliates.csv', encoding='utf-8', index=False)
+    df.to_csv('./data/gmv_affiliates.csv', encoding='utf-8', index=False)
     print('done')
 
 if __name__ == '__main__':
