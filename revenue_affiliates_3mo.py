@@ -111,12 +111,12 @@ def rev_aff_skimlinks(start_date, end_date, sk_api_key, sk_private):
     c.close()
     response = b.getvalue()
     # parse the response:
-    root = ET.fromstring(response)
+    root_ = ET.fromstring(response)
     # loop whithin commissionS and loop in its child
     x = []
     y = pd.DataFrame()
     z = pd.DataFrame()
-    for commission in root[3]:
+    for commission in root_[3]:
         x = []
         for child in commission:
             x.append(child.text)
@@ -124,7 +124,7 @@ def rev_aff_skimlinks(start_date, end_date, sk_api_key, sk_private):
         z = z.append(y)
     # give the dataframe's columns a name
     col = []
-    for child in commission:
+    for child in root_[3][1]:
         col.append(child.tag)
     z.columns = col
     # convert to correct type
@@ -333,6 +333,7 @@ def get_keys(filename):
     with open(filename, 'r') as myfile:
         for line in myfile:
             line = line.rstrip('\n')
+            line = line.rstrip('\r')
             name, var = line.partition("=")[::2]
             _keys[name.strip()] = str(var)
     return _keys
