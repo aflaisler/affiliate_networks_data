@@ -257,9 +257,9 @@ def rev_aff_linkshare(start_date, end_date, lk_api_token):
     lkshare_uk.insert(0, 'affiliateNetwork', 'linkshare_uk', allow_duplicates=True)
     
     # us network
-    url = 'https://ran-reporting.rakutenmarketing.com/en/reports/api_report_aymeric_us/filters?' \
+    url = 'https://ran-reporting.rakutenmarketing.com/en/reports/api_report_aymeric/filters?' \
     'start_date='+start_date.strftime('%Y-%m-%d')+'&end_date='+end_date.strftime('%Y-%m-%d')+ \
-    '&include_summary=N&network=3&tz=GMT&date_type=transaction&token='+lk_api_token
+    '&include_summary=N&network=1&tz=GMT&date_type=transaction&token='+lk_api_token
     lkshare_us = pd.read_csv(url, thousands=',')
     # conversion in GBP
     lkshare_us['Total Commission'] = lkshare_us[['Total Commission']].astype(np.float)*0.79
@@ -354,5 +354,7 @@ if __name__ == '__main__':
                                   datetime.min.time()) - timedelta(days=100)
     end_date = datetime.combine(date.today(), datetime.min.time())
     download_to_drive(start_date, end_date, filename)
+    
+    
     
 
