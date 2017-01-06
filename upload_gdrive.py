@@ -7,13 +7,23 @@ from datetime import datetime
 
 def upload_to_drive(df):
     # prod: 
-    spreadsheet = '1gAUh4rXrD5vlVodmmC5wARmIKWssJOxMWbTGQzs-FlE'
+    # spreadsheet = '1gAUh4rXrD5vlVodmmC5wARmIKWssJOxMWbTGQzs-FlE'
     # staging: 
-    #spreadsheet = '1ZDXIEn6CQMEZmbPsQ0GsDpu4oS65RUjZtp2dFwExdDA'
-    extract_date = datetime.combine(date.today(), datetime.min.time()).strftime('%d%b%y')
+    spreadsheet = '1ZDXIEn6CQMEZmbPsQ0GsDpu4oS65RUjZtp2dFwExdDA'
+    extract_date = datetime.now().strftime('%d%b%y_%H'+'h'+'%M')
     wks_name = 'GMV_affiliate_@' + str(extract_date)
     print('uploading')
-    d2g.upload(df, gfile=spreadsheet, wks_name=wks_name, df_size=True)
+    result = None
+    n=0
+    while (result is None) and (n!=3):
+        try:
+            # upload
+            result = d2g.upload(df, gfile=spreadsheet, wks_name=wks_name, df_size=True)
+            n=3
+        except:
+            n+=1
+            print(n)
+            pass
     d2g.del_inBetween_wks(spreadsheet)
     
 if __name__ == '__main__':

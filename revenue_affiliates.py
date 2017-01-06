@@ -14,6 +14,7 @@ import sys
 from suds.xsd.doctor import ImportDoctor, Import
 from suds.client import Client
 import dateutil.parser
+import argparse
 
 
 
@@ -345,13 +346,21 @@ def download_to_drive(start_date, end_date, filename):
     df.sort_values('date', axis=0, ascending=False, inplace=True)
     df = df.fillna('').reset_index(drop=True)
     df.to_csv('./data/gmv_affiliates.csv', encoding='utf-8', index=False)
-    print('done')
+    print('done, %s entries retrieved') %(len(df))
 
 if __name__ == '__main__':
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("days", type=int, help="number of days from now to retrieve data")
+    args = parser.parse_args()
+
+    assert args.days is not None, "Please enter the number of days to retrieve the data from"
+    assert isinstance(args.days, (int, long)), "Please enter a number between 1 and 365"    
+    
     ####
     filename = './private/api_keys'
     start_date = datetime.combine(date.today(),
-                                  datetime.min.time()) - timedelta(days=100)
+                                  datetime.min.time()) - timedelta(days=args.days)
     end_date = datetime.combine(date.today(), datetime.min.time())
     download_to_drive(start_date, end_date, filename)
     
